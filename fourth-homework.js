@@ -6,6 +6,12 @@ class Calculator {
 		}
 		this.x = x;
 		this.y = y;
+
+		// Bind methods to the instance to ensure correct 'this' context
+		this.logSum = this.logSum.bind(this);
+		this.logMul = this.logMul.bind(this);
+		this.logSub = this.logSub.bind(this);
+		this.logDiv = this.logDiv.bind(this);
 	}
 
 	setX(x) {
@@ -45,13 +51,12 @@ class Calculator {
 		return typeof num === 'number' && isFinite(num);
 	}
 }
-
 // Creating an instance of the Calculator class
 const calculator = new Calculator(5, 2);
 
 // Methods of the second group working correctly even if placed in a separate variable
-const logSumRef = calculator.logSum();
-console.log(logSumRef); // Output: 7
+const logSumRef = calculator.logSum;
+console.log(logSumRef()); // Output: 7
 
 // Part 2
 console.log("Start");
@@ -77,5 +82,5 @@ Promise.all([promise1, promise2])
 	.catch((error) => {
 		console.error("Error occurred:", error.message);
 	});
-	
+
 console.log("End");
