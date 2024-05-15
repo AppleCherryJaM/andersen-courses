@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Interactive Button and Timer</title>
+	<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+	<div class="container">
+		<!-- First Part -->
+		<div class="button-container">
+			<button id="clickMeButton">Click me!</button>
+		</div>
+		<!-- Second Part -->
+		<div class="timer-container">
+			<h2>Stopwatch</h2>
+			<div id="stopwatch">00:00:00</div>
+			<button id="startStopwatch">Start</button>
+			<button id="stopStopwatch">Stop</button>
+			<button id="resetStopwatch">Reset</button>
+		</div>
+		<div class="timer-container">
+			<h2>Timer</h2>
+			<input type="text" id="timerInput" placeholder="Enter time (mm:ss)">
+			<button id="startTimer">Start</button>
+			<button id="stopTimer">Stop</button>
+			<button id="resetTimer">Reset</button>
+			<button id="addMinute">+1m</button>
+		</div>
+	</div>
+
+	<script src="index.js"></script>
+</body>
+
+</html>
