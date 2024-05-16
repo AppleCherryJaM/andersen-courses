@@ -1,16 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
-	const clickMeButton = document.getElementById("clickMeButton");
-	const timerInput = document.getElementById("timerInput");
-	const startStopwatchButton = document.getElementById("startStopwatch");
-	const stopStopwatchButton = document.getElementById("stopStopwatch");
-	const resetStopwatchButton = document.getElementById("resetStopwatch");
-	const startTimerButton = document.getElementById("startTimer");
-	const stopTimerButton = document.getElementById("stopTimer");
-	const resetTimerButton = document.getElementById("resetTimer");
-	const addMinuteButton = document.getElementById("addMinute");
-
+	// Stopwatch functionality
 	let stopwatchInterval;
 	let stopwatchTime = 0;
+	const stopwatchDisplay = document.getElementById("stopwatch");
 
 	function formatTime(timeInSeconds) {
 		const hours = Math.floor(timeInSeconds / 3600);
@@ -20,149 +12,95 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 	function startStopwatch() {
-		stopwatchInterval = setInterval(() => {
-			stopwatchTime++;
-			document.getElementById("stopwatch").textContent = formatTime(stopwatchTime);
-		}, 1000);
-		startStopwatchButton.disabled = true;
-		stopStopwatchButton.disabled = false;
+		if (!stopwatchInterval) {
+			stopwatchInterval = setInterval(() => {
+				stopwatchTime++;
+				stopwatchDisplay.textContent = formatTime(stopwatchTime);
+			}, 1000);
+		}
 	}
 
 	function stopStopwatch() {
 		clearInterval(stopwatchInterval);
-		startStopwatchButton.disabled = false;
-		stopStopwatchButton.disabled = true;
+		stopwatchInterval = null;
 	}
 
 	function resetStopwatch() {
 		clearInterval(stopwatchInterval);
+		stopwatchInterval = null;
 		stopwatchTime = 0;
-		document.getElementById("stopwatch").textContent = formatTime(stopwatchTime);
-		startStopwatchButton.disabled = false;
-		stopStopwatchButton.disabled = true;
+		stopwatchDisplay.textContent = formatTime(stopwatchTime);
+	}
+
+	document.getElementById("startStopwatch").addEventListener("click", startStopwatch);
+	document.getElementById("stopStopwatch").addEventListener("click", stopStopwatch);
+	document.getElementById("resetStopwatch").addEventListener("click", resetStopwatch);
+
+	// Timer functionality
+	let timerInterval;
+	let timerTime = 0;
+	const timerInput = document.getElementById("timerInput");
+	const timerDisplay = document.getElementById("timerDisplay");
+
+	function parseTimeInput(input) {
+		const parts = input.split(':');
+		if (parts.length === 2) {
+			const minutes = parseInt(parts[0]);
+			const seconds = parseInt(parts[1]);
+			if (!isNaN(minutes) && !isNaN(seconds)) {
+				return minutes * 60 + seconds;
+			}
+		}
+		return 0;
+	}
+
+	function updateTimerDisplay() {
+		const minutes = Math.floor(timerTime / 60);
+		const seconds = timerTime % 60;
+		timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 	}
 
 	function startTimer() {
-		const timeInput = timerInput.value.trim();
-		const timeParts = timeInput.split(":");
-		if (timeParts.length !== 2 || isNaN(parseInt(timeParts[0])) || isNaN(parseInt(timeParts[1]))) {
-			alert("Invalid time format. Please enter time in mm:ss format.");
-			return;
-		}
-		const minutes = parseInt(timeParts[0]);
-		const seconds = parseInt(timeParts[1]);
-		const totalTime = minutes * 60 + seconds;
-
-		let remainingTime = totalTime;
-		document.getElementById("timerInput").disabled = true;
-		startTimerButton.disabled = true;
-		stopTimerButton.disabled = false;
-
-		const timerInterval = setInterval(() => {
-			if (remainingTime <= 0) {
-				clearInterval(timerInterval);
-				document.getElementById("timerInput").disabled = false;
-				startTimerButton.disabled = false;
-				stopTimerButton.disabled = true;
-				alert("Timer finished!");
-				return;
+		if (!timerInterval) {
+			timerTime = parseTimeInput(timerInput.value);
+			if (timerTime > 0) {
+				timerInterval = setInterval(() => {
+					if (timerTime > 0) {
+						timerTime--;
+						updateTimerDisplay();
+					} else {
+						clearInterval(timerInterval);
+						timerInterval = null;
+						alert("Timer finished!");
+					}
+				}, 1000);
 			}
-			remainingTime--;
-			document.getElementById("timerInput").value = formatTime(remainingTime);
-		}, 1000);
+		}
 	}
 
 	function stopTimer() {
-		document.getElementById("timerInput").disabled = false;
-		startTimerButton.disabled = false;
-		stopTimerButton.disabled = true;
+		clearInterval(timerInterval);
+		timerInterval = null;
 	}
 
 	function resetTimer() {
-		document.getElementById("timerInput").disabled = false;
-		document.getElementById("timerInput").value = "";
-		startTimerButton.disabled = false;
-		stopTimerButton.disabled = true;
+		clearInterval(timerInterval);
+		timerInterval = null;
+		timerTime = 0;
+		updateTimerDisplay();
+		timerInput.value = '';
 	}
 
-	function addMinuteToTimer() {
-		const timeInput = timerInput.value.trim();
-		const timeParts = timeInput.split(":");
-		if (timeParts.length !== 2 || isNaN(parseInt(timeParts[0])) || isNaN(parseInt(timeParts[1]))) {
-			alert("Invalid time format. Please enter time in mm:ss format.");
-			return;
-		}
-		const minutes = parseInt(timeParts[0]);
-		const seconds = parseInt(timeParts[1]);
-		const totalTime = minutes * 60 + seconds + 60;
-		document.getElementById("timerInput").value = formatTime(totalTime);
+	function addMinute() {
+		timerTime += 60;
+		updateTimerDisplay();
 	}
 
-	function getRandomPosition() {
-		const x = Math.random() * (window.innerWidth - clickMeButton.offsetWidth);
-		const y = Math.random() * (window.innerHeight - clickMeButton.offsetHeight);
-		return { x, y };
-	}
+	document.getElementById("startTimer").addEventListener("click", startTimer);
+	document.getElementById("stopTimer").addEventListener("click", stopTimer);
+	document.getElementById("resetTimer").addEventListener("click", resetTimer);
+	document.getElementById("addMinute").addEventListener("click", addMinute);
 
-	function moveButtonRandomly() {
-		const position = getRandomPosition();
-		clickMeButton.style.left = `${position.x}px`;
-		clickMeButton.style.top = `${position.y}px`;
-	}
-
-	clickMeButton.addEventListener("click", moveButtonRandomly);
-	clickMeButton.addEventListener("mouseover", () => {
-		const randomProbability = Math.random();
-		if (randomProbability >= 0.5) {
-			clickMeButton.style.display = "none";
-			moveButtonRandomly();
-			setTimeout(() => {
-				clickMeButton.style.display = "block";
-			}, 1000);
-		}
-	});
-
-	startStopwatchButton.addEventListener("click", startStopwatch);
-	stopStopwatchButton.addEventListener("click", stopStopwatch);
-	resetStopwatchButton.addEventListener("click", resetStopwatch);
-	startTimerButton.addEventListener("click", startTimer);
-	stopTimerButton.addEventListener("click", stopTimer);
-	resetTimerButton.addEventListener("click", resetTimer);
-	addMinuteButton.addEventListener("click", addMinuteToTimer);
+	// Initial display update
+	updateTimerDisplay();
 });
-
-
-// document.addEventListener("DOMContentLoaded", function () {
-// 	const clickMeButton = document.getElementById("clickMeButton");
-
-// 	function getRandomPosition() {
-// 		const x = Math.random() * (window.innerWidth - clickMeButton.offsetWidth);
-// 		const y = Math.random() * (window.innerHeight - clickMeButton.offsetHeight);
-// 		return { x, y };
-// 	}
-
-// 	function moveButtonRandomly() {
-// 		const position = getRandomPosition();
-// 		clickMeButton.style.left = `${position.x}px`;
-// 		clickMeButton.style.top = `${position.y}px`;
-// 	}
-
-// 	clickMeButton.addEventListener("click", () => {
-// 		clickMeButton.style.display = "none";
-// 		moveButtonRandomly();
-// 		setTimeout(() => {
-// 			clickMeButton.style.display = "block";
-// 		}, 1000);
-// 	});
-
-// 	clickMeButton.addEventListener("mouseover", () => {
-// 		const randomProbability = Math.random();
-// 		if (randomProbability >= 0.5) {
-// 			clickMeButton.style.display = "none";
-// 			moveButtonRandomly();
-// 			setTimeout(() => {
-// 				clickMeButton.style.display = "block";
-// 			}, 1000);
-// 		}
-// 	});
-// });
