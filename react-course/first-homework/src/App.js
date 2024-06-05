@@ -1,23 +1,27 @@
 // src/App.js
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Navigate } from 'react-router-dom';
-import QuizConfig from './pages/QuizConfig';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import QuizConfig from './screens/configScreen/QuizConfig';
+import Timer from './components/timer/Timer';
 import './App.css';  // Import the CSS file
 
 const App = () => {
   const [darkMode, setDarkMode] = useState(false);
 
   return (
-    // <Router>
+    <Router>
       <div className={`container ${darkMode ? 'dark' : ''}`}>
-        {/* <Switch> */}
-          {/* <Route path="/" exact> */}
+        <Switch>
+          <Route path="/" >
+            <Timer min={1} />
+          </Route>
+          <Route path="/quizConfig">
             <QuizConfig darkMode={darkMode} setDarkMode={setDarkMode} />
-          {/* </Route> */}
-          {/* Add routes for other screens like quiz and stats */}
-        {/* </Switch> */}
+          </Route>
+          <Redirect to="/quizConfig"/>
+        </Switch>
       </div>
-    // </Router>
+    </Router>
   );
 };
 

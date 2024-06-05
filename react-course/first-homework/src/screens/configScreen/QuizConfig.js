@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import NumberInput from '../components/UI/NumberInput';
-import SelectInput from '../components/UI/SelectInput';
+import NumberInput from '../../components/UI/numberInput/NumberInput';
+import SelectInput from '../../components/UI/selectInput/SelectInput';
 import './QuizConfig.css';
 
 const QuizConfig = () => {
