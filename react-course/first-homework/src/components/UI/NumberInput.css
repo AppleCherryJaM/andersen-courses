@@ -1,0 +1,19 @@
+.input-container {
+	margin: 10px 0;
+}
+
+.input-label {
+	display: block;
+	margin-bottom: 5px;
+	color: var(--text-color);
+}
+
+.input-field {
+	width: 100%;
+	padding: 10px;
+	margin: 5px 0;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	background-color: var(--input-bg);
+	color: var(--text-color);
+}

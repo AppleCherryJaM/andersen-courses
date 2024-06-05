@@ -1,7 +1,7 @@
-// src/screens/QuizConfig.js
 import React, { useState } from 'react';
 import NumberInput from '../components/UI/NumberInput';
 import SelectInput from '../components/UI/SelectInput';
+import './QuizConfig.css';
 
 const QuizConfig = () => {
 	const [numQuestions, setNumQuestions] = useState(5);
@@ -9,6 +9,7 @@ const QuizConfig = () => {
 	const [difficulty, setDifficulty] = useState('');
 	const [type, setType] = useState('');
 	const [time, setTime] = useState('1m');
+	const [darkMode, setDarkMode] = useState(false);
 
 	const handleStartQuiz = () => {
 		console.log('Starting quiz with settings:', {
@@ -24,9 +25,13 @@ const QuizConfig = () => {
 		console.log('Navigating to stats screen');
 	};
 
+	const toggleDarkMode = () => {
+		setDarkMode(!darkMode);
+	};
+
 	return (
-		<div>
-			<h1>Quiz Configuration</h1>
+		<div className={`container ${darkMode ? 'dark' : ''}`}>
+			<h1 id='quiz-config-text-label'>Quiz Configuration</h1>
 			<NumberInput
 				value={numQuestions}
 				onChange={(e) => setNumQuestions(e.target.value)}
@@ -39,7 +44,6 @@ const QuizConfig = () => {
 					{ value: '', label: 'Select Category' },
 					{ value: 'general', label: 'General Knowledge' },
 					{ value: 'science', label: 'Science' },
-					// Add more categories as needed
 				]}
 				value={category}
 				onChange={(e) => setCategory(e.target.value)}
@@ -75,8 +79,19 @@ const QuizConfig = () => {
 				value={time}
 				onChange={(e) => setTime(e.target.value)}
 			/>
-			<button onClick={handleStartQuiz}>Start Quiz</button>
-			<button onClick={handleSeeStats}>See My Stats</button>
+			<div>
+				<button onClick={handleStartQuiz} className="button">
+					Start Quiz
+				</button>
+				<button onClick={handleSeeStats} className="button">
+					See My Stats
+				</button>
+			</div>
+			<div>
+				<button onClick={toggleDarkMode} className="button">
+					Toggle Dark Mode
+				</button>
+			</div>
 		</div>
 	);
 };
