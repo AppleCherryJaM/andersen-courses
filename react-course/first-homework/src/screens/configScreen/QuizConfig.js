@@ -30,7 +30,7 @@ const QuizConfig = () => {
 	};
 
 	return (
-		<div className={`container ${darkMode ? 'dark' : ''}`}>
+		<div>
 			<h1 id='quiz-config-text-label'>Quiz Configuration</h1>
 			<NumberInput
 				value={numQuestions}
@@ -87,11 +87,11 @@ const QuizConfig = () => {
 					See My Stats
 				</button>
 			</div>
-			<div>
+			{/* <div>
 				<button onClick={toggleDarkMode} className="button">
 					Toggle Dark Mode
 				</button>
-			</div>
+			</div> */}
 		</div>
 	);
 };

@@ -1,6 +1,8 @@
 import React from "react";
 import { useState, useEffect } from "react";
 
+import classes from "./Timer.module.css"
+
 const Timer = ({ min }) => {
 	const [minutes, setMinutes] = useState(min);
 	const [seconds, setSeconds] = useState(0);
@@ -18,8 +20,11 @@ const Timer = ({ min }) => {
 		return () => clearInterval(timer);
 	}, [minutes, seconds]);
 
-	return <div className="timer">
-		{minutes}:{seconds}
+	return <div className={classes.timer}>
+		{minutes}:{seconds < 10 && <span>
+				0
+			</span>}
+			{seconds}
 	</div>
 }
 
