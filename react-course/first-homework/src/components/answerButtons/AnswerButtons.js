@@ -1,19 +1,19 @@
 // src/components/AnswerButtons.js
 import React, { useContext, useRef, useState } from 'react';
 
-import { ScoreContext } from '../../context/ScoreContext';
+import { QuizContext } from '../../context/QuizContext';
 // import ButtonInput from '../UI/buttonInput/ButtonInput';
 import classes from './AnswerButtons.module.css';
 
-const AnswerButtons = ({ options }) => {
-	// const [isCorrect, setIsCorrect] = useState(false)
+const AnswerButtons = ({ options, isLocked }) => {
 	const answerOptions = useRef(null);
-	const { checkAnswer } = useContext(ScoreContext);
-	// const className = classnames(isCorrect? "AnswerButtons_correct__EXfms" : null)
-	// const checkOnAns = () => {
-
-	// }
-	console.log("AnswerOption: ", answerOptions.current);
+	const { checkAnswer } = useContext(QuizContext);
+	if (!isLocked) {
+		Array.prototype.forEach.call(
+			document.getElementsByClassName(classes.answerButton),
+			(element) => { element.classList.remove(classes.correct); element.classList.remove(classes.incorrect) }
+		);
+	}
 
 	return (
 		<ul ref={answerOptions} className={classes.answerButtons}>

@@ -1,34 +1,38 @@
-import React, { useState } from 'react';
+import React, {useContext, useState} from 'react';
 import NumberInput from '../../components/UI/numberInput/NumberInput';
 import SelectInput from '../../components/UI/selectInput/SelectInput';
+import ButtonInput from '../../components/UI/buttonInput/ButtonInput';
+
 import './QuizConfig.css';
 
-const QuizConfig = () => {
-	const [numQuestions, setNumQuestions] = useState(5);
-	const [category, setCategory] = useState('');
-	const [difficulty, setDifficulty] = useState('');
-	const [type, setType] = useState('');
-	const [time, setTime] = useState('1m');
-	const [darkMode, setDarkMode] = useState(false);
-
-	const handleStartQuiz = () => {
-		console.log('Starting quiz with settings:', {
-			numQuestions,
-			category,
-			difficulty,
-			type,
-			time,
+const QuizConfig = ({ categories, types, setTime, setFilters }) => {
+	
+	let typesOptions = [];
+	for (let i = 0; i < types.length; i++) {
+		typesOptions.push({
+			value: types[i],
+			label: types[i]
 		});
-	};
+	}
+
+	let categoriesOptions = [];
+	for (let i = 0; i < categories.length; i++) {
+		categoriesOptions.push({
+			value: categories[i],
+			label: categories[i]
+		});
+	}
+
+	const [numQuestions, setNumQuestions] = useState(5);
+	const [category, setCategory] = useState(categoriesOptions[0].value);
+	const [difficulty, setDifficulty] = useState('Easy');
+	const [type, setType] = useState(typesOptions[0].value);
 
 	const handleSeeStats = () => {
 		console.log('Navigating to stats screen');
 	};
 
-	const toggleDarkMode = () => {
-		setDarkMode(!darkMode);
-	};
-
+	console.log("Object: " + type);
 	return (
 		<div>
 			<h1 id='quiz-config-text-label'>Quiz Configuration</h1>
@@ -40,18 +44,13 @@ const QuizConfig = () => {
 			/>
 			<SelectInput
 				label="Category"
-				options={[
-					{ value: '', label: 'Select Category' },
-					{ value: 'general', label: 'General Knowledge' },
-					{ value: 'science', label: 'Science' },
-				]}
+				options={categoriesOptions}
 				value={category}
 				onChange={(e) => setCategory(e.target.value)}
 			/>
 			<SelectInput
 				label="Difficulty"
 				options={[
-					{ value: '', label: 'Select Difficulty' },
 					{ value: 'easy', label: 'Easy' },
 					{ value: 'medium', label: 'Medium' },
 					{ value: 'hard', label: 'Hard' },
@@ -61,31 +60,28 @@ const QuizConfig = () => {
 			/>
 			<SelectInput
 				label="Type"
-				options={[
-					{ value: '', label: 'Select Type' },
-					{ value: 'multiple', label: 'Multiple Choice' },
-					{ value: 'boolean', label: 'True/False' },
-				]}
+				options={typesOptions}
 				value={type}
 				onChange={(e) => setType(e.target.value)}
 			/>
 			<SelectInput
 				label="Time"
 				options={[
-					{ value: '1m', label: '1 minute' },
-					{ value: '2m', label: '2 minutes' },
-					{ value: '5m', label: '5 minutes' },
+					{ value: 1, label: '1 minute' },
+					{ value: 2, label: '2 minutes' },
+					{ value: 5, label: '5 minutes' },
 				]}
-				value={time}
 				onChange={(e) => setTime(e.target.value)}
 			/>
 			<div>
-				<button onClick={handleStartQuiz} className="button">
+				<ButtonInput to={"/quizMain"} onClick={(e) => setFilters({
+					category, type, difficulty
+				})} className="button">
 					Start Quiz
-				</button>
-				<button onClick={handleSeeStats} className="button">
+				</ButtonInput>
+				<ButtonInput onClick={handleSeeStats} className="button">
 					See My Stats
-				</button>
+				</ButtonInput>
 			</div>
 			{/* <div>
 				<button onClick={toggleDarkMode} className="button">

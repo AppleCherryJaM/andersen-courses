@@ -100,7 +100,7 @@ export const Questions = [
 		"answers": ["50", "60", "55", "54"]
 	},
 	{
-		"category": "Entertainment A Video Games",
+		"category": "Entertainment & Video Games",
 		"type": "multiple",
 		"difficulty": "hard",
 		"question": "In 'World of Warcraft' lore who organized the creation of the Paladins",
@@ -113,7 +113,7 @@ export const Questions = [
 		]
 	},
 	{
-		"category": "Entertainment A Video Games",
+		"category": "Entertainment & Video Games",
 		"type": "boolean",
 		"difficulty": "medium",
 		"question": "In the game  'Subnautica' a  Cave Crawler  will attack you.",
@@ -121,7 +121,7 @@ export const Questions = [
 		"answers": ["True","False"]
 	},
 	{
-		"category": "Entertainment A Japanese Anime & Manga",
+		"category": "Entertainment & Japanese Anime & Manga",
 		"type": "multiple",
 		"difficulty": "medium",
 		"question": "What is the name of the device that allows for infinite energy in the anime  Dimension W  ",
