@@ -1,26 +1,22 @@
-import React, { useState, useRef } from 'react';
-// import { Questions as quizData } from '../../data/Questions';
+import React, { useState } from 'react';
 import QuestionText from '../../components/questionText/QuestionText';
 import ProgressBar from '../../components/progressBar/ProgressBar';
 import AnswerButtons from '../../components/answerButtons/AnswerButtons';
-// import ButtonInput from '../../components/UI/buttonInput/ButtonInput';
-// import Timer from '../../components/timer/Timer';
+import ButtonInput from '../../components/UI/buttonInput/ButtonInput';
+import Timer from '../../components/timer/Timer';
 import { QuizContext } from '../../context/QuizContext';
 import QuizError from '../errorScreen/QuizError';
+import { INCREMENT_SCORE } from "../../data/Keywords"
+
 
 import classes from './QuizMain.module.css';
+import { useDispatch } from 'react-redux';
 
-const QuizMain = ({time, quizData}) => {
-	console.log("QuizData: ", quizData);
+const QuizMain = ({ time, quizData, setIsEnd }) => {
+	const dispatch = useDispatch();
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-	const [score, setScore] = useState(0); 
 	const [currentQuestion, setCurrentQuestion] = useState(quizData[currentQuestionIndex]);
 	const [isLocked, setIsLocked] = useState(false);
-	const [isEnd, setIsEnd] = useState(false);
-	
-	const handleEndQuiz = () => {
-		
-	};
 
 	const next = () => {
 		if (isLocked) {
@@ -37,7 +33,7 @@ const QuizMain = ({time, quizData}) => {
 	const checkAnswer = (e, answer) => {
 		if (!isLocked) {
 			if (currentQuestion.correct_answer === answer) {
-				setScore(prev => prev + 1);
+				dispatch({type: INCREMENT_SCORE, payload: 1});
 				e.target.classList.add("AnswerButtons_correct__EXfms");
 			} else {
 				e.target.classList.add("AnswerButtons_incorrect__Blrvc");
@@ -49,11 +45,22 @@ const QuizMain = ({time, quizData}) => {
 	if (quizData.length > 0) {
 		return (
 			<>
+				<Timer min={time} setIsEnd={setIsEnd}/>
 				<QuestionText index={currentQuestionIndex + 1} text={currentQuestion.question} />
 				<QuizContext.Provider value={{ checkAnswer }}>
 					<AnswerButtons options={currentQuestion} isLocked={isLocked} />
 				</QuizContext.Provider>
-				<button className={classes.nextButton} onClick={next}>Next</button>
+				{currentQuestionIndex < quizData.length - 1 && 
+					<div className={classes.btnContainer}>
+						<ButtonInput to='/quizResult'>End Quiz</ButtonInput>
+						<button onClick={next} className={classes.nextButton}>Next</button>
+					</div>
+				}
+				{currentQuestionIndex === quizData.length - 1 &&
+					<div className={classes.btnContainer}>
+						<ButtonInput to='/quizResult' className={`${classes.nextButton} ${classes.endButton}`}>End Quiz</ButtonInput>
+					</div>
+				}
 				<ProgressBar
 					current={currentQuestionIndex + 1}
 					total={quizData.length}

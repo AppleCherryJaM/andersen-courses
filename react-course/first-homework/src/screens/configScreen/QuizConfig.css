@@ -12,6 +12,11 @@
 	color: var(--text-color);
 }
 
+.btnContainer {
+	padding-top: 25px
+}
+
+
 /* .button {
 	width: calc(50% - 10px);
 	padding: 10px;

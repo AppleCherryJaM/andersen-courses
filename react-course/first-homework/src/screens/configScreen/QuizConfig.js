@@ -2,10 +2,12 @@ import React, {useContext, useState} from 'react';
 import NumberInput from '../../components/UI/numberInput/NumberInput';
 import SelectInput from '../../components/UI/selectInput/SelectInput';
 import ButtonInput from '../../components/UI/buttonInput/ButtonInput';
+import { ADD_STAT } from "../../data/Keywords"
 
 import './QuizConfig.css';
+import { useDispatch } from 'react-redux';
 
-const QuizConfig = ({ categories, types, setTime, setFilters }) => {
+const QuizConfig = ({ categories, types, setTime }) => {
 	
 	let typesOptions = [];
 	for (let i = 0; i < types.length; i++) {
@@ -23,16 +25,23 @@ const QuizConfig = ({ categories, types, setTime, setFilters }) => {
 		});
 	}
 
+	const dispatch = useDispatch();
+
 	const [numQuestions, setNumQuestions] = useState(5);
 	const [category, setCategory] = useState(categoriesOptions[0].value);
 	const [difficulty, setDifficulty] = useState('Easy');
 	const [type, setType] = useState(typesOptions[0].value);
 
+	const handleStartQuiz = () => {
+		dispatch({type: ADD_STAT, payload: {
+			category, type, difficulty
+		}});
+	}
+
 	const handleSeeStats = () => {
 		console.log('Navigating to stats screen');
 	};
 
-	console.log("Object: " + type);
 	return (
 		<div>
 			<h1 id='quiz-config-text-label'>Quiz Configuration</h1>
@@ -73,13 +82,11 @@ const QuizConfig = ({ categories, types, setTime, setFilters }) => {
 				]}
 				onChange={(e) => setTime(e.target.value)}
 			/>
-			<div>
-				<ButtonInput to={"/quizMain"} onClick={(e) => setFilters({
-					category, type, difficulty
-				})} className="button">
+			<div className='btnContainer'>
+				<ButtonInput to={"/quizMain"} className="config-button" onClick={handleStartQuiz}>
 					Start Quiz
 				</ButtonInput>
-				<ButtonInput onClick={handleSeeStats} className="button">
+				<ButtonInput onClick={handleSeeStats} className="config-button">
 					See My Stats
 				</ButtonInput>
 			</div>

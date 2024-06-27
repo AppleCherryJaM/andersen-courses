@@ -3,30 +3,26 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-d
 import QuizConfig from './screens/configScreen/QuizConfig';
 import QuizMain from './screens/mainScreen/QuizMain';
 import QuizResult from './screens/resultScreen/QuizResult';
-import QuizError from './screens/errorScreen/QuizError';
+import QuizStat from './screens/statisticsScreen/QuizStat';
 
-import { QuizContext } from './context/QuizContext';
 import './App.css';
 import { Questions as quizData } from './data/Questions';
+import { useSelector } from 'react-redux';
 
 const App = () => {
   const [darkMode, setDarkMode] = useState(false);
-  const [score, setScore] = useState(0);
-  const [isEnd, setIsEnd] = useState(false);
   const [time, setTime] = useState(1);
-  const [filters, setFilters] = useState('Heresy');
+  const [isEnd, setIsEnd] = useState(false);
+  const filters = useSelector(state => state.quiz.statistics[state.quiz.statistics.length-1]);
 
-  const filterQuestions = () => {
+  function filterQuestions () {
     let filteredQuestions = [];
     if (filters.category && filters.type && filters.difficulty) {
       for (let element of quizData){
-        console.log(`Element: ${element.category} ${element.difficulty} ${element.type}`);
-        console.log(`Filter: ${filters.category} ${filters.difficulty} ${filters.type}`)
         if (element.category === filters.category
           && element.difficulty === filters.difficulty
           && element.type === filters.type
         ) {
-          console.log("Entered 4");
           filteredQuestions.push(element);
         }
       }
@@ -41,7 +37,11 @@ const App = () => {
     types.add(element.type);
   }
 
-  const filteredData = filterQuestions();
+  let filteredData, questionNumbers;
+  if (filters) {
+    filteredData = filterQuestions()
+    questionNumbers = filteredData.length
+  }
 
   return (
     <Router>
@@ -50,20 +50,18 @@ const App = () => {
           <hr />
         <Switch>
           <Route path="/quizConfig">
-            {/* <QuizContext.Provider value={{ filterQuestions }}> */}
-              <QuizConfig categories={[...categories]}
-                types={[...types]}
-                setTime={setTime} 
-                setFilters={setFilters}/>
-            {/* </QuizContext.Provider> */}
+            <QuizConfig categories={[...categories]}
+              types={[...types]}
+              setTime={setTime}/>
           </Route>
           <Route path="/quizMain">
-            <QuizContext.Provider value={{ setScore }}>
-              <QuizMain quizData={filteredData} time={time}/>
-            </QuizContext.Provider>
+            <QuizMain quizData={filteredData} time={time} setIsEnd={setIsEnd}/>
           </Route>
           <Route path="/quizResult">
-            <QuizResult />
+            <QuizResult questionQuantity={questionNumbers} filters={filters}/>
+          </Route>
+          <Route path="/quizStat">
+            <QuizStat />
           </Route>
           <Redirect to="/quizConfig"/>
         </Switch>

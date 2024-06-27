@@ -1,0 +1,6 @@
+export const ADD_STAT = "ADD_STAT"
+export const GET_BY_TYPE = "GET_BY_TYPE"
+export const GET_BY_DIFFICULTY = "GET_BY_DIFFICULTY"
+export const GET_BY_CATEGORY = "GET_BY_CATEGORY"
+export const INCREMENT_SCORE = "INCREMENT_SCORE"
+export const GET_CURRENT_SCORE = "GET_CURR_SCORE"

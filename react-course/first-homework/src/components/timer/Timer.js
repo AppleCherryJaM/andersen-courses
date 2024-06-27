@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 
 import classes from "./Timer.module.css"
 
-const Timer = ({ min }) => {
+const Timer = ({ min, setIsEnd }) => {
 	const [minutes, setMinutes] = useState(min);
 	const [seconds, setSeconds] = useState(0);
 
@@ -20,8 +20,14 @@ const Timer = ({ min }) => {
 		return () => clearInterval(timer);
 	}, [minutes, seconds]);
 
+	if (minutes === 0 && seconds === 0) {
+		setIsEnd(true);
+	}
+
 	return <div className={classes.timer}>
-		{minutes}:{seconds < 10 && <span>
+		{minutes < 10 && <span>
+			0
+		</span>}{minutes}:{seconds < 10 && <span>
 				0
 			</span>}
 			{seconds}
